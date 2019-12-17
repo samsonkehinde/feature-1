@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <template id='charge_transaction'>
+            {
+                "amount":"<t t-esc='amount'/>",
+                "email":"<t t-esc='email'/>",
+                "card":{
+                    "cvv":"<t t-esc='cvv'/>",
+                    "number":"<t t-esc='pan'/>",
+                    "expiry_month":"<t t-esc='expiry_month'/>",
+                    "expiry_year":"<t t-esc='expiry_year'/>"
+                },
+                "pin":"<t t-esc='pin'/>"
+            }
+        </template>
+
+        <template id='refund_transaction'>
+            {
+                "transaction":"<t t-esc='ref'/>",
+                "amount": "<t t-esc='amount'/>"
+            }
+        </template>
+
+        <template id='send_otp'>
+            {
+                "reference":"<t t-esc='ref'/>",
+                "otp": "<t t-esc='otp'/>"
+            }
+        </template>
+    </data>
+</odoo>

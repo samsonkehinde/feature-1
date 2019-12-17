@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_calendar_event_form_inherit_app" model="ir.ui.view">
+        <field name="name">calendar.event.form.inherit.app</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form_popup"/>
+        <field name="arch" type="xml">
+
+            <field name="location" position="replace">
+                <field name="location" widget="url" />
+            </field>
+            
+            <field name="partner_ids" position="after">
+                <field name="reason"/>
+            </field>
+
+        </field>
+    </record>
+
+    <record id="view_calendar_event_form_app" model="ir.ui.view">
+        <field name="name">calendar.event.form.app</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//page[last()]" position="after">
+                <page name="mobile" string="Mobile App" groups="base.group_no_one">
+                    <group>
+                        <label for="reason" string="Purpose of Visit"/>
+                        <field name="reason" nolabel="1"/>
+                    </group>
+                    <group>
+                        <label for="order_ids" string="Transactions"/>
+                        <field name="order_ids" nolabel="1"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_pos_pg_configuration_form" model="ir.ui.view">
+        <field name="name">Payment Gateway Configurations</field>
+        <field name="model">pos_pay_central.configuration</field>
+        <field name="arch" type="xml">
+            <form string="Payment Gateways">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <div>
+                        <p>
+                            <i>Payment Gateway Settings</i>
+                            define the settings to be used in processing a Point Of Sale transactions. After setting up this
+                            configuration you should associate it with a Point Of Sale payment Method/Journal.
+                        </p>
+                        <p>
+                            Using the Payment Gateway in the Point Of Sale is easy: just press the
+                            associated payment method, then ask the user to provide card details.
+                        </p>
+                        <p>
+                            If you don't already a payment processor account, please visit their website
+                            to create one.
+                        </p>
+                    </div>
+                    <group col="2">
+                        <field name="update_cycle"/>
+                        <field name="secret" />
+                        <field name="payment_processor"/>
+                        <field name="charge_url"/>
+                        <field name="verify_url"/>
+                        <field name="refund_url"/>
+                        <field name="otp_url"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_pos_pg_configuration_tree" model="ir.ui.view">
+        <field name="name">Payment Gateway Configurations</field>
+        <field name="model">pos_pay_central.configuration</field>
+        <field name="arch" type="xml">
+            <tree string="Payment Gateways">
+                <field name="name"/>
+                <field name="payment_processor"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="pg_action_configuration_form" model="ir.actions.act_window">
+        <field name="name">Payment Gateway Configurations</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">pos_pay_central.configuration</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click to configure your Payment Gateway Configuration.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_account_journal_pg_pos_user_form" model="ir.ui.view">
+        <field name="name">POS Journal</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="point_of_sale.view_account_journal_pos_user_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='amount_authorized']" position="after">
+                <group attrs="{'invisible': [('type', '!=', 'bank')]}">
+                    <field name="pos_pg_config_id"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_account_bank_journal_form_inherited_pos_pg" model="ir.ui.view">
+        <field name="name">account.bank.journal.form.inherited.pos.pg</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="point_of_sale.view_account_bank_journal_form_inherited_pos"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='journal_user']" position="after">
+                <field name="pos_pg_config_id" attrs="{'invisible': [('journal_user', '=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_pg_pos_order" model="ir.ui.view">
+        <field name="name">POS orders</field>
+        <field name="model">pos.order</field>
+        <field name="inherit_id" ref="point_of_sale.view_pos_pos_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='amount']" position="before">
+                <field name="pos_card_number"/>
+                <field name="pos_ref_no"/>
+                <field name="pos_payment_method"/>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem parent="point_of_sale.menu_point_config_product" name="Payment Gateway Setup"
+              action="pos_pay_central.pg_action_configuration_form" id="menu_pos_pg_config" groups="base.group_no_one" sequence="35"/>
+</odoo>

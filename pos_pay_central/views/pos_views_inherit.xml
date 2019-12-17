@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pos_config_view_form_inherit_pos_pg" model="ir.ui.view">
+        <field name="name">pos.config.form.inherit.pg</field>
+        <field name="model">pos.config</field>
+        <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+        <field name="arch" type="xml">
+            <div id="btn_use_pos_mercury" position="replace">
+                <div class="mt16">
+                    <button name="%(pos_pay_central.pg_action_configuration_form)d" icon="fa-arrow-right" type="action"
+                            string="FastPay Account" class="btn-link"/>
+                </div>
+                <div>
+                    <a class="oe_link" href="https://www.paystack.com/get_account" target="_blank">
+                        <i class="fa fa-fw fa-arrow-right"/>Get a Paystack Account
+                    </a>
+                </div>
+            </div>
+        </field>
+    </record>
+</odoo>

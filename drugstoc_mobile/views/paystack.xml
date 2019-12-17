@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <data>
+        <template id="paystack_success">
+            <t t-call="website.layout">
+                <t t-set="title">Payment Successful</t>
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            Paystack Payment Successful
+                        </h4>
+                    </div>
+                    <div class="panel-body">
+                        <table class='table table-bordered'>
+                            <tbody>
+                                <tr>
+                                    <td class="active">
+                                        Payment Reference:
+                                    </td>
+                                    <td>
+                                        <t t-esc="invoice.payment_ref"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="active">
+                                        Amount:
+                                    </td>
+                                    <td class='col-tendered edit'>
+                                        <t t-esc="invoice.amount_total"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="paystack_error">
+            <t t-call="website.layout">
+                <t t-set="title">Payment Failed</t>
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            Paystack Payment Failed
+                        </h4>
+                    </div>
+                    <div class="panel-body">
+                        <p>
+                            <strong>Reason:</strong>
+                        </p>
+                        <pre>
+                            <t t-esc="msg"/>
+                        </pre>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="assets_backend" name="static_resources_sweetalert assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <!--Drugstoc CSS/Javascript
+                <link rel="stylesheet" href="/drugstoc_mobile/static/src/css/paystack.css"/>
+                <script type="text/javascript" src="/drugstoc_mobile/static/src/js/paystack.js"></script>
+                -->
+                <!--SweetAlert CSS/Javascript
+                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
+                <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+                -->
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<templates id="template" inherit_id="point_of_sale.template">
+    <t t-extend="PaymentScreen-Paymentlines">
+        <t t-jquery=".col-name" t-operation="inner">
+            <t t-if="line.cashregister.journal.type === 'bank'">
+                APPROVED!
+            </t>
+            <t t-if="line.cashregister.journal.type !== 'bank'">
+                <t t-esc='line.name'/>
+            </t>
+        </t>
+    </t>
+
+    <t t-name="PosMercurySignature">
+        <t t-foreach="paymentlines" t-as="paymentline">
+            <t t-if="paymentline.pos_payment_method &amp;&amp; ! printed_signature">
+                <br/>
+                <div>THANKS FOR YOUR ORDER</div>
+            </t>
+        </t>
+    </t>
+
+    <t t-extend="XmlReceipt">
+        <t t-jquery="t[t-foreach*='paymentlines'][t-as*='line']" t-operation="append">
+            <t t-if="line.pos_payment_method">
+                <line line-ratio="1">
+                    <left>
+                        <pre>TRANS REF:</pre>
+                        <t t-esc="line.pos_ref_no"/>
+                    </left>
+                    <left>
+                        <pre>CARD:</pre>
+                        <t t-esc="line.pos_card_number"/>
+                    </left>
+                    <left>
+                        <pre>ACQUIRER:</pre>
+                        <t t-esc="line.pos_payment_method"/>
+                    </left>
+                </line>
+            </t>
+        </t>
+        <t t-jquery="receipt" t-operation="append">
+            <div>
+                <t t-call="PosMercurySignature"/>
+            </div>
+        </t>
+    </t>
+
+    <t t-extend="PosTicket">
+        <t t-jquery="t[t-foreach*='paymentlines'][t-as*='line']" t-operation="append">
+            <tr>
+                <td colspan="2">
+                    <t t-if="line.pos_payment_method">
+                        &amp;nbsp;&amp;nbsp;<strong>TRANS REF:</strong><t t-esc="line.pos_ref_no"/><br/>
+                        &amp;nbsp;&amp;nbsp;<strong>CARD:</strong>*******<t t-esc="line.pos_card_number"/><br/>
+                        &amp;nbsp;&amp;nbsp;<strong>ACQUIRER:</strong><t t-esc="line.pos_payment_method"/>
+                    </t>
+                </td>
+            </tr>
+        </t>
+        <t t-jquery="t[t-if*='receipt.footer']" t-operation="after">
+            <div class="pos-center-align">
+                <t t-call="PosMercurySignature"/>
+            </div>
+        </t>
+    </t>
+
+    <t t-name="PosFastPaySignature">
+        <t t-foreach="paymentlines" t-as="paymentline">
+            <t t-if="paymentline.pos_payment_method &amp;&amp; ! printed_signature">
+                <br/>
+                <div>CARDHOLDER WILL PAY CARD ISSUER</div>
+                <div>ABOVE AMOUNT PURSUANT</div>
+                <div>TO CARDHOLDER AGREEMENT</div>
+                <br/>
+                <br/>
+                <div>X______________________________</div>
+                <t t-set="printed_signature" t-value="true"/>
+            </t>
+        </t>
+    </t>
+
+    <t t-name="PaymentPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup" style="height: 490px;">
+                <p class="title">
+                    <img src="/pos_pay_central/static/src/img/accepted_cards.png"/>
+                </p>
+                <div id="payment_controls">
+                    <p>
+                        <div class="input-group">
+                            <input
+                                    type="number"
+                                    class="form-control"
+                                    id="card_pan"
+                                    placeholder="Card Number"
+                            />
+                            <span class="input-group-addon">
+                                <i class="fa fa-credit-card"></i>
+                            </span>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="input-group">
+                            <input
+                                    type="text"
+                                    class="form-control"
+                                    id="card_expiry"
+                                    placeholder="Expiry - MM/YY"
+                            />
+                            <span class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="input-group">
+                            <input
+                                    type="number"
+                                    class="form-control"
+                                    id="card_cvv"
+                                    placeholder="CVV - 3 DIGIT"
+                            />
+                            <span class="input-group-addon">
+                                <i class="fa fa-barcode"></i>
+                            </span>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="input-group">
+                            <input
+                                    type="email"
+                                    class="form-control"
+                                    id="card_email"
+                                    placeholder="Cardholder Email"
+                            />
+                            <span class="input-group-addon">
+                                <i class="fa fa-envelope-o"></i>
+                            </span>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="input-group">
+                            <input
+                                    type="password"
+                                    class="form-control"
+                                    id="card_pin"
+                                    placeholder="PIN"
+                            />
+                            <span class="input-group-addon">
+                                <i class="fa fa-key"></i>
+                            </span>
+                        </div>
+                    </p>
+                </div>
+                <div id="otp_controls" style="display: none;">
+                    <p>
+                        <div class="input-group">
+                            <input
+                                    type="password"
+                                    class="form-control"
+                                    id="otp"
+                                    placeholder="OTP"
+
+                            />
+                            <span class="input-group-addon">
+                                <i class="fa fa-shield"></i>
+                            </span>
+                        </div>
+                    </p>
+                </div>
+                <div class="footer" style="position: static;">
+                    <div id="status"
+                         style="color: green;float: left;height: 100%;margin-left: 10px;align-items: center;display: flex;justify-content: center;font-weight: lighter">
+                        status
+                    </div>
+                    <div class="button confirm" disabled="disabled">
+                        Process
+                    </div>
+                    <div class="button cancel">
+                        Cancel
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="RefundTransactionPopupWidget">
+        <div class="modal-dialog">
+            <div class="popup" style="height: 200px;width: 300px">
+                <p class="title">Transaction Reversal</p>
+                <p class="body"></p>
+            </div>
+        </div>
+    </t>
+</templates>

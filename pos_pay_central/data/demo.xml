@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+        <!-- This is a Paystack test account for testing with test cards and cannot be used in a live environment -->
+        <record id="pos_paystack_configuration" model="pos_pay_central.configuration">
+            <field name="name">Paystack Configuration</field>
+            <field name="update_cycle">10000</field><!--    1000ms  -->
+            <field name="secret">sk_test_d76d61425130d493d0fc991db825f85dcf164b96</field>
+            <field name="payment_processor">paystack</field>
+            <field name="charge_url">https://api.paystack.co/transaction/initialize</field>
+            <field name="refund_url">https://api.paystack.co/refund</field>
+            <field name="verify_url">https://api.paystack.co/transaction/verify/</field>
+            <field name="otp_url">https://api.paystack.co/charge/submit_otp</field>
+        </record>
+    </data>
+</odoo>
